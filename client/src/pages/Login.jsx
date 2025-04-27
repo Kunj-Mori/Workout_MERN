@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { API_URL } from '../config/config';
 import './Login.css';
 
 function Login() {
@@ -13,11 +14,11 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
         setError('');
+        setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:4000/api/user/login', {
+            const response = await fetch(`${API_URL}/api/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -31,16 +32,16 @@ function Login() {
                 throw new Error(data.error || 'Failed to login');
             }
 
-            // Save the user object in localStorage
+            // Save user data to localStorage
             localStorage.setItem('user', JSON.stringify(data));
             
             // Update auth context
             dispatch({ type: 'LOGIN', payload: data });
             
-            // Redirect to home/workout page
+            // Navigate to home page
             navigate('/');
         } catch (err) {
-            setError(err.message || 'Invalid email or password');
+            setError(err.message);
         } finally {
             setLoading(false);
         }

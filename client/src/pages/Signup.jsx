@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { API_URL } from '../config/config';
 import './Login.css';
 
 function Signup() {
@@ -27,33 +28,26 @@ function Signup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
         setError('');
+        setLoading(true);
 
-        // Validate password match
+        // Password validation
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
             setLoading(false);
             return;
         }
 
-        // Validate password length
-        if (formData.password.length < 6) {
-            setError('Password must be at least 6 characters long');
-            setLoading(false);
-            return;
-        }
-
         try {
-            const response = await fetch('http://localhost:4000/api/user/signup', {
+            const response = await fetch(`${API_URL}/api/user/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: formData.username,
                     email: formData.email,
-                    password: formData.password
+                    password: formData.password,
+                    username: formData.username
                 })
             });
 
@@ -63,16 +57,16 @@ function Signup() {
                 throw new Error(data.error || 'Failed to create account');
             }
 
-            // Save the user object in localStorage
+            // Save user data to localStorage
             localStorage.setItem('user', JSON.stringify(data));
             
             // Update auth context
             dispatch({ type: 'LOGIN', payload: data });
             
-            // Redirect to home/workout page
+            // Navigate to home page
             navigate('/');
         } catch (err) {
-            setError(err.message || 'Error creating account. Please try again.');
+            setError(err.message);
         } finally {
             setLoading(false);
         }
