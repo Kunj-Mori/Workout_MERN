@@ -1,0 +1,299 @@
+.dashboard {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 70px auto 0;
+}
+
+.dashboard-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.dashboard-header h2 {
+    color: #2d3748;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+.dashboard-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.calculator-container, .info-container {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calculator-header, .info-header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.calculator-header h3, .info-header h3 {
+    color: #2d3748;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.calculator-header p, .info-header p {
+    color: #718096;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
+.form-group label i {
+    color: #667eea;
+}
+
+.form-group input {
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #a0aec0;
+}
+
+.bmi-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.calculate-btn, .reset-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calculate-btn {
+    background: #667eea;
+    color: white;
+    flex: 2;
+}
+
+.calculate-btn:hover {
+    background: #5a67d8;
+    transform: translateY(-1px);
+}
+
+.reset-btn {
+    background: #e2e8f0;
+    color: #4a5568;
+    flex: 1;
+}
+
+.reset-btn:hover {
+    background: #cbd5e0;
+    transform: translateY(-1px);
+}
+
+.result-section {
+    margin-top: 2rem;
+    text-align: center;
+    padding: 1.5rem;
+    background: #f7fafc;
+    border-radius: 12px;
+}
+
+.result-section h3 {
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.bmi-value {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.bmi-value .number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #667eea;
+}
+
+.bmi-value .label {
+    color: #718096;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.status-badge.underweight {
+    background-color: #ecc94b;
+    color: #744210;
+}
+
+.status-badge.normal-weight {
+    background-color: #48bb78;
+    color: #22543d;
+}
+
+.status-badge.overweight {
+    background-color: #ed8936;
+    color: #7b341e;
+}
+
+.status-badge.obese {
+    background-color: #f56565;
+    color: #742a2a;
+}
+
+.info-container {
+    height: fit-content;
+}
+
+.bmi-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.category {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f7fafc;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.category:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.category-range {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.category-label {
+    font-weight: 500;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+}
+
+.category-label.underweight {
+    background-color: #fefcbf;
+    color: #744210;
+}
+
+.category-label.normal-weight {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+.category-label.overweight {
+    background-color: #feebc8;
+    color: #7b341e;
+}
+
+.category-label.obese {
+    background-color: #fed7d7;
+    color: #742a2a;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .dashboard {
+        padding: 1rem;
+    }
+
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+
+    .info-container {
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-header h2 {
+        font-size: 2rem;
+    }
+
+    .bmi-buttons {
+        flex-direction: column;
+    }
+
+    .calculate-btn, .reset-btn {
+        width: 100%;
+    }
+
+    .category {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard {
+        padding: 1rem 0.5rem;
+    }
+
+    .calculator-container, .info-container {
+        padding: 1rem;
+    }
+
+    .dashboard-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .form-group input {
+        font-size: 0.875rem;
+    }
+} 
