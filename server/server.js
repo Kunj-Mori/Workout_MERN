@@ -6,17 +6,14 @@ require("dotenv").config()
 const workoutRoutes = require('./routes/workouts')
 const userRoutes = require('./routes/user')
 
-// Environment variables
-const PORT = process.env.PORT || 4000
-const MONGODB_URI = process.env.MONGO_URI || "mongodb://localhost:27017/workout_db"
-
+// Create Express app
 const app = express()
 
 // Middleware
 app.use(cors({
     origin: ['https://workout-crud-mern.vercel.app', 'http://localhost:3000'],
     credentials: true
-  }));
+}));
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
@@ -45,21 +42,46 @@ app.use((err, req, res, next) => {
     })
 })
 
-// Database connection
-mongoose.connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => {
-    console.log("Connected to MongoDB successfully")
+// Connect to MongoDB
+let cachedDb = null;
+
+async function connectToDatabase() {
+    if (cachedDb) {
+        return cachedDb;
+    }
+    
+    try {
+        const db = await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        
+        cachedDb = db;
+        console.log("Connected to MongoDB successfully");
+        return db;
+    } catch (error) {
+        console.error("MongoDB connection error:", error);
+        throw error;
+    }
+}
+
+// Connect to database before handling requests
+app.use(async (req, res, next) => {
+    try {
+        await connectToDatabase();
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`)
-    })
-})
-.catch((error) => {
-    console.error("MongoDB connection error:", error)
-    process.exit(1)
-})
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}
 
 // Export the Express API
 module.exports = app;
