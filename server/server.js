@@ -23,6 +23,41 @@ app.use((req, res, next) => {
     next()
 })
 
+// Database connection
+let cachedDb = null;
+
+async function connectToDatabase() {
+    if (cachedDb) {
+        console.log('Using cached database instance');
+        return cachedDb;
+    }
+    
+    try {
+        const db = await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        
+        cachedDb = db;
+        console.log('New database connection established');
+        return db;
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        throw error;
+    }
+}
+
+// Connect to database before handling requests
+app.use(async (req, res, next) => {
+    try {
+        await connectToDatabase();
+        next();
+    } catch (error) {
+        console.error('Database connection error:', error);
+        res.status(500).json({ error: 'Database connection failed' });
+    }
+});
+
 // Routes
 app.use("/api/workouts", workoutRoutes)
 app.use("/api/user", userRoutes)
@@ -34,45 +69,20 @@ app.get("/api/health", (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack)
+    console.error('Error:', err);
     res.status(500).json({
         status: "error",
-        message: "Something went wrong!",
-        error: process.env.NODE_ENV === "development" ? err.message : undefined
+        message: err.message || "Something went wrong!",
+        error: process.env.NODE_ENV === "development" ? err.stack : undefined
     })
 })
 
-// Connect to MongoDB
-let cachedDb = null;
-
-async function connectToDatabase() {
-    if (cachedDb) {
-        return cachedDb;
-    }
-    
-    try {
-        const db = await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        
-        cachedDb = db;
-        console.log("Connected to MongoDB successfully");
-        return db;
-    } catch (error) {
-        console.error("MongoDB connection error:", error);
-        throw error;
-    }
-}
-
-// Connect to database before handling requests
-app.use(async (req, res, next) => {
-    try {
-        await connectToDatabase();
-        next();
-    } catch (error) {
-        next(error);
-    }
+// Handle 404 routes
+app.use((req, res) => {
+    res.status(404).json({
+        status: "error",
+        message: "Route not found"
+    });
 });
 
 // For local development
